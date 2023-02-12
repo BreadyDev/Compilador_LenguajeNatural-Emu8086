@@ -8,7 +8,7 @@ leer num1
 escribir "Ingresa el segundo valor:"
 leer num2
 
-tex = "Suma de los valores:"
+tex = "Suma de los valores mas 2:"
 escribir tex
-res = num1 + num2
+res = num1 + num2 + 2
 escribir res

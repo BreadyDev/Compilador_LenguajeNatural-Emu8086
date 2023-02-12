@@ -1,8 +1,8 @@
 import re
 
-### Objetos a usar
+### Variables
 
-# Variables
+# Expresiones regulares
 
 alpha = re.compile("[A-Za-zÑñ0-9=+-/()<>¿?,.\"]+")
 lenguaje = re.compile("(leer|escribir|si|finsi|mientras|finmientras|entero|decimal|texto)")
@@ -16,7 +16,10 @@ m_valor_a_entero = re.compile("[A-Za-z0-9]+ = ([A-Za-z0-9]+|[0-9]+)( (\+|-|\*|/)
 m_valor_a_decimal = re.compile("[A-Za-z0-9]+ = ([A-Za-z0-9]+|([0-9]+.[0-9]+|[0-9]+))( (\+|-|\*|/) ([A-Za-z0-9]+|([0-9]+.[0-9]+|[0-9]+)))*")
 m_valor_a_texto = re.compile("[A-Za-z0-9]+ = (\".*?\")")
 
+# Tabla de variables
 variables = [{"name":"", "tipe":"", "value":""}]
+
+# Tabla de errores
 errores = (
     "Err-01 : Variable ya declarada",
     "Err-02 : Variable no existente",
@@ -25,20 +28,24 @@ errores = (
     "Err-05 : Valores no coincidentes"
 )
 
-i = 1 #numero de linea
+# Numero de linea
+i = 1
 
-# Funciones
+### Funciones
 
+# Da el mensaje de error y termina el programa
 def error(n_error, linea):
     print(f"\nError en la linea {i}: \n{linea} \n{errores[n_error]}")
     exit()
 
+# Busca si la variable existe o no
 def buscar_nombre_variable(palabra):
     for var in variables:
         if var.get("name") == palabra:
             return False
     return True
 
+# Añade la variable y su tipo a la tabla de valores
 def añadir_variables(palabra, variables, linea):
     if variables[0].get("name") == "":
         return [{"name":palabra[1], "tipe":palabra[0], "value":"null"}]
@@ -48,6 +55,7 @@ def añadir_variables(palabra, variables, linea):
     else:
         error(0, linea)
         
+# Muestra todas las variables
 def mostrar_variables(vars):
     print("\n**************VARIABLES**************\n")  
     for var in vars:
@@ -55,6 +63,7 @@ def mostrar_variables(vars):
         print("Tipo: " + str(dict(var).get("tipe")))
         print("Valor: " + str(dict(var).get("value")) + "\n")
         
+# Busca la variable y da su posicion en la lista
 def buscar_var(palabra, variables, linea):
     i = 0
     for var in variables:
@@ -63,6 +72,7 @@ def buscar_var(palabra, variables, linea):
         i += 1
     error(1, linea)
     
+# Le da el valor a la variable leida
 def leer_var(palabra, variables, linea):
     valor = str(input())
     tipo = str(variables[buscar_var(palabra, variables, linea)]["tipe"])
@@ -85,14 +95,17 @@ def leer_var(palabra, variables, linea):
         
     return variables
 
+# Escribe la variable
 def escribir_var(palabra, variables, linea):
     return str(variables[buscar_var(palabra, variables, linea)]["value"]).replace("\"","")
 
+# Escribe la variable
 def escribir_tex(linea):
     linea = linea.replace("escribir ", "")
     linea = linea.replace("\"", "")
     return linea
 
+# La de valor a una variable
 def valor_a_variable(palabra, variables, linea, palabra_list):
 
     tipo = str(variables[buscar_var(palabra, variables, linea)]["tipe"])
@@ -107,12 +120,34 @@ def valor_a_variable(palabra, variables, linea, palabra_list):
         for i in range(2, len(palabra_list), 2):
             if not buscar_nombre_variable(palabra_list[i]):
                 if variables[buscar_var(palabra_list[i], variables, linea)]["tipe"] == "entero":
-                    valor += int(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                    if(palabra_list[i-1] == "=" or palabra_list[i-1] == "+"):
+                        valor += int(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                        
+                    elif(palabra_list[i-1] == "-"):
+                        valor -= int(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                        
+                    elif(palabra_list[i-1] == "*"):
+                        valor *= int(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                        
+                    elif(palabra_list[i-1] == "/"):
+                        valor /= int(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                        
                 else:
                     error(4, linea)
             else:
                 if palabra_list[i].isnumeric():
-                    valor += int(palabra_list[i])
+                    if(palabra_list[i-1] == "=" or palabra_list[i-1] == "+"):
+                        valor += int(palabra_list[i])
+                        
+                    elif(palabra_list[i-1] == "-"):
+                        valor -= int(palabra_list[i])
+                        
+                    elif(palabra_list[i-1] == "*"):
+                        valor *= int(palabra_list[i])
+                        
+                    elif(palabra_list[i-1] == "/"):
+                        valor /= int(palabra_list[i])
+                    
                 else:
                     error(4, linea)
     elif tipo == "decimal":
@@ -124,12 +159,34 @@ def valor_a_variable(palabra, variables, linea, palabra_list):
         for i in range(2, len(palabra_list), 2):
             if not buscar_nombre_variable(palabra_list[i]):
                 if variables[buscar_var(palabra_list[i], variables, linea)]["tipe"] == "decimal":
-                    valor += float(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                    if(palabra_list[i-1] == "=" or palabra_list[i-1] == "+"):
+                        valor += float(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                        
+                    elif(palabra_list[i-1] == "-"):
+                        valor -= float(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                        
+                    elif(palabra_list[i-1] == "*"):
+                        valor *= float(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                        
+                    elif(palabra_list[i-1] == "/"):
+                        valor /= float(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                        
                 else:
                     error(4, linea)
             else:
                 if m_decimal.match(palabra_list[i]):
-                    valor += float(palabra_list[i])
+                    if(palabra_list[i-1] == "=" or palabra_list[i-1] == "+"):
+                        valor += float(palabra_list[i])
+                        
+                    elif(palabra_list[i-1] == "-"):
+                        valor -= float(palabra_list[i])
+                        
+                    elif(palabra_list[i-1] == "*"):
+                        valor *= float(palabra_list[i])
+                        
+                    elif(palabra_list[i-1] == "/"):
+                        valor /= float(palabra_list[i])
+                    
                 else:
                     error(4, linea)
                     
