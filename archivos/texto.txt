@@ -1,0 +1,8 @@
+entero var1
+decimal var2
+texto var3
+
+var3
+var2
+var
+var1
