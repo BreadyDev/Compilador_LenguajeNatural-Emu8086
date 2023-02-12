@@ -11,18 +11,19 @@ m_leer = re.compile("(leer [A-Za-z0-9]+)")
 m_escribir_texto = re.compile("(escribir [\".*?\"])")
 m_escribir_var = re.compile("(escribir [A-Za-z0-9]+)")
 m_string = re.compile("\".*?\"")
-m_decimal = re.compile("[0-9].[0-9]")
+m_decimal = re.compile("([0-9]+.[0-9]+)|([0-9]+)")
 m_valor_a_entero = re.compile("[A-Za-z0-9]+ = ([A-Za-z0-9]+|[0-9]+)( (\+|-|\*|/) ([A-Za-z0-9]+|[0-9]+))*")
-m_valor_a_decimal = re.compile("[A-Za-z0-9]+ = ([A-Za-z0-9]+|([0-9]+.[0-9]+))( (\+|-|\*|/) ([A-Za-z0-9]+|([0-9]+.[0-9]+)))*")
-m_valor_a_texto = re.compile("[A-Za-z0-9]+ = ([A-Za-z0-9]+|(\".*?\"))")
+m_valor_a_decimal = re.compile("[A-Za-z0-9]+ = ([A-Za-z0-9]+|([0-9]+.[0-9]+|[0-9]+))( (\+|-|\*|/) ([A-Za-z0-9]+|([0-9]+.[0-9]+|[0-9]+)))*")
+m_valor_a_texto = re.compile("[A-Za-z0-9]+ = (\".*?\")")
 
 variables = [{"name":"", "tipe":"", "value":""}]
-errores = [
+errores = (
     "Err-01 : Variable ya declarada",
     "Err-02 : Variable no existente",
     "Err-03 : Valor ingresado no apto para la variable",
-    "Err-04 : Linea no valida"
-    ]
+    "Err-04 : Linea no valida",
+    "Err-05 : Valores no coincidentes"
+)
 
 i = 1 #numero de linea
 
@@ -70,7 +71,10 @@ def leer_var(palabra, variables, linea):
         variables[buscar_var(palabra, variables, linea)]["value"] = valor
         
     elif tipo == "decimal" and m_decimal.match(valor):
-        valor = valor.replace(",", ".")
+        if valor.isdecimal():
+            valor += ".0"
+        else:
+            valor = valor.replace(",", ".")
         variables[buscar_var(palabra, variables, linea)]["value"] = valor
        
     elif tipo == "texto":
@@ -82,21 +86,58 @@ def leer_var(palabra, variables, linea):
     return variables
 
 def escribir_var(palabra, variables, linea):
-    return (variables[buscar_var(palabra, variables, linea)]["value"])
+    return str(variables[buscar_var(palabra, variables, linea)]["value"]).replace("\"","")
 
 def escribir_tex(linea):
     linea = linea.replace("escribir ", "")
     linea = linea.replace("\"", "")
     return linea
 
-def valor_a_variable(palabra, variables, linea):
-    
+def valor_a_variable(palabra, variables, linea, palabra_list):
+
     tipo = str(variables[buscar_var(palabra, variables, linea)]["tipe"])
+    valor = str(variables[buscar_var(palabra, variables, linea)]["value"])
     
     if tipo == "entero":
-        print()
-    
-    return variables
+        if valor == "null":
+            valor = 0
+        else:
+            valor = int(valor)
+            
+        for i in range(2, len(palabra_list), 2):
+            if not buscar_nombre_variable(palabra_list[i]):
+                if variables[buscar_var(palabra_list[i], variables, linea)]["tipe"] == "entero":
+                    valor += int(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                else:
+                    error(4, linea)
+            else:
+                if palabra_list[i].isnumeric():
+                    valor += int(palabra_list[i])
+                else:
+                    error(4, linea)
+    elif tipo == "decimal":
+        if valor == "null":
+            valor = 0.0
+        else:
+            valor = float(valor)
+            
+        for i in range(2, len(palabra_list), 2):
+            if not buscar_nombre_variable(palabra_list[i]):
+                if variables[buscar_var(palabra_list[i], variables, linea)]["tipe"] == "decimal":
+                    valor += float(variables[buscar_var(palabra_list[i], variables, linea)]["value"])
+                else:
+                    error(4, linea)
+            else:
+                if m_decimal.match(palabra_list[i]):
+                    valor += float(palabra_list[i])
+                else:
+                    error(4, linea)
+                    
+    elif tipo == "texto":
+        valor = linea.replace(palabra + " = ", "")
+            
+    variables[buscar_var(palabra, variables, linea)]["value"] = str(valor)
+        
 
 ### Lectura del archivo ###
 
@@ -122,9 +163,9 @@ for linea in archivo:
             elif m_escribir_texto.match(linea):
                 print(escribir_tex(linea))
                 
-        elif not buscar_nombre_variable(palabra[0]):
-            print("es una variable")
-            
+        elif not buscar_nombre_variable(palabra[0]) or m_valor_a_decimal.match(linea) or m_valor_a_texto.match(linea):
+                valor_a_variable(palabra[0], variables, linea, palabra)
+
         else:
             error(3, linea)
             

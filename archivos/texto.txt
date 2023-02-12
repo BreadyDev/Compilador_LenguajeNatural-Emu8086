@@ -1,8 +1,14 @@
-entero var1
-decimal var2
-texto var3
+decimal num1
+decimal num2
+decimal res
+texto tex
 
-var3
-var2
-var
-var1
+escribir "Ingresa el primer valor:"
+leer num1
+escribir "Ingresa el segundo valor:"
+leer num2
+
+tex = "Suma de los valores:"
+escribir tex
+res = num1 + num2
+escribir res
