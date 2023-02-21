@@ -1,14 +1,17 @@
+Title Suma numeros 1
+
 decimal num1
 decimal num2
 decimal res
 texto tex
 
+escribir "SUMA DE VALORES"
 escribir "Ingresa el primer valor:"
 leer num1
 escribir "Ingresa el segundo valor:"
 leer num2
 
-tex = "Suma de los valores mas 2:"
+tex = "Suma de los valores: "
 escribir tex
-res = num1 + num2 + 2
+res = num1 + num2
 escribir res
