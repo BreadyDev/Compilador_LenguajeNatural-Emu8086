@@ -1,12 +1,11 @@
-TITLE Estructura_Basica
+Title 'variables'
 
 DATOS SEGMENT
 ;DECLARAR VARIABLES----------------------
                                                                           
 num1 DW ?
 num2 DW ?
-res DW ?
-tex DW ?
+num3 DW ?
                                          
 ;----------------------------------------
 

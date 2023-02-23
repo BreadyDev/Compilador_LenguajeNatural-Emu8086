@@ -1,0 +1,10 @@
+Title variables
+
+entero num1
+entero num2
+entero num3
+
+leer num1
+leer num2
+
+num3 = num1 + num2
