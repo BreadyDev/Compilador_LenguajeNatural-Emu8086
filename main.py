@@ -1,8 +1,19 @@
+"""
+Faltante en f_val_var()
+
+1.- Valor de texto a variables
+2.- No aceptar operaciones con texto
+3.- Aceptar digitos
+
+"""
+
 import re
 
 ### Variables
 
 found = False
+
+nombre_archivo = "texto.txt"
 
 # Lectura de la base
 
@@ -147,6 +158,9 @@ def f_var_dec(linea, variables, lin):
     for i in range(2, len(linea), 2):  
         if not variables[buscar_posicion_variable(linea[i], variables)]["tipe"] == tipo:
             error(3, lin)
+            
+    variables[buscar_posicion_variable(linea[0], variables)]["value"] = True
+    return variables
 
 # Numero de linea
 i = 1
@@ -156,7 +170,7 @@ par_a = 0
 
 ### Lectura del archivo ###
 
-with open("Compilador/archivos/variables.txt", "r") as texto:
+with open(f"Compilador/archivos/{nombre_archivo}", "r") as texto:
     archivo = texto.read().split("\n")
     
 ### Iteracion del archivo ###
@@ -256,16 +270,17 @@ for linea in archivo:
             print("valor var")
             found = True
             
-            f_var_dec(palabra, variables, linea)
+            variables = f_var_dec(palabra, variables, linea)
                 
         if not found and linea != "":
             error(5, i) 
-                
-        i += 1
-        found = False
         
     elif linea != "":
         error(4, linea)
+        
+    i += 1
+    found = False
+    
 # Verificacion de ciclos cerrados
 
 if par_a != 0:

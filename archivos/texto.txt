@@ -30,9 +30,6 @@ si num1 == num2
 escribir "Num1 es igual que Num2"
 fin
 
-
-
-tex = "Suma de los valores: "
-escribir tex
+escribir "Suma de los valores: "
 res = num1 + num2
 escribir res
