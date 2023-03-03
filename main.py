@@ -3,7 +3,7 @@ Faltante en f_val_var()
 
 1.- Valor de texto a variables
 2.- No aceptar operaciones con texto
-3.- Aceptar digitos
+3.- Aceptar constantes
 
 """
 
@@ -11,6 +11,13 @@ import re
 
 ### Variables
 
+# Numero de linea
+i = 1
+
+# parentesis abiertos
+lin_par = []
+
+# Comprobar si se encontro el tipo de la linea
 found = False
 
 nombre_archivo = "texto.txt"
@@ -56,7 +63,8 @@ errores = (
     "Err-08 : Caracter desconocido",
     "Err-09 : Bloques de codigo no cerrados",
     "Err-10 : Variable sin valor",
-    "Err-11 : Variable no apta para la operacion"
+    "Err-11 : Variable no apta para la operacion",
+    "Err-12 : Bloque de codigo no abierto antes del fin"
 )
 
 ### Funciones ###
@@ -146,7 +154,7 @@ def f_mientras(linea, variables, lin):
 
 # Para
 
-def f_para(linea, variables, lin):
+def f_para(linea, variables, lin):#no sea texto la variable
     if buscar_nombre_variable(linea[1], variables):
         error(3, lin)
     if not (variables[buscar_posicion_variable(linea[1], variables)]["value"]):
@@ -155,18 +163,34 @@ def f_para(linea, variables, lin):
 # Variables
 def f_var_dec(linea, variables, lin):
     tipo = variables[buscar_posicion_variable(linea[0], variables)]["tipe"]
-    for i in range(2, len(linea), 2):  
-        if not variables[buscar_posicion_variable(linea[i], variables)]["tipe"] == tipo:
+    
+    if tipo == "entero":
+        if m_valor_a_entero.match(lin):
+            for i in range(2, len(linea), 2):
+                if str(linea[i]).isdigit():
+                    print("digito")
+                elif variables[buscar_posicion_variable(linea[i], variables)]["tipe"] == tipo:
+                    print("variable entera")
+                else:
+                    error(3, lin)
+            
+    elif tipo == "decimal":
+        for i in range(2, len(linea), 2):
+                if str(linea[i]).isdecimal():
+                    print("digito")
+                elif variables[buscar_posicion_variable(linea[i], variables)]["tipe"] == tipo:
+                    print("variable entera")
+                else:
+                    error(3, lin)
+            
+    elif tipo == "texto":   
+        if m_valor_a_texto.match(lin):
+            print("texto a variable")
+        else:
             error(3, lin)
             
     variables[buscar_posicion_variable(linea[0], variables)]["value"] = True
     return variables
-
-# Numero de linea
-i = 1
-
-# parentesis abiertos
-par_a = 0
 
 ### Lectura del archivo ###
 
@@ -233,7 +257,7 @@ for linea in archivo:
                 found = True
                 
                 f_si(palabra, variables, linea)
-                par_a += 1
+                lin_par.append(i)
             else:
                 error(0, linea)
                 
@@ -243,9 +267,9 @@ for linea in archivo:
                 found = True
                 
                 f_mientras(palabra, variables, linea)
-                par_a += 1
+                lin_par.append(i)
             else:
-                error(0, i)
+                error(0, linea)
             
         if palabra[0] == "para":
             if m_para.match(linea):
@@ -253,18 +277,21 @@ for linea in archivo:
                 found = True
                 
                 f_para(palabra, variables, linea)
-                par_a += 1
+                lin_par.append(i)
             else:
-                error(0, i)
+                error(0, linea)
                 
         if palabra[0] == "fin":
             if linea == "fin":
                 print("fin")
                 found = True
                 
-                par_a -= 1
+                try:
+                    lin_par.remove(lin_par[-1])
+                except:
+                    error(11, linea)
             else:
-                error(0, i)
+                error(0, linea)
                     
         if not buscar_nombre_variable(palabra[0], variables):
             print("valor var")
@@ -273,7 +300,7 @@ for linea in archivo:
             variables = f_var_dec(palabra, variables, linea)
                 
         if not found and linea != "":
-            error(5, i) 
+            error(5, linea) 
         
     elif linea != "":
         error(4, linea)
@@ -283,8 +310,8 @@ for linea in archivo:
     
 # Verificacion de ciclos cerrados
 
-if par_a != 0:
-    print(f"\nError en el programa\n{errores[8]}")
+if lin_par != []:
+    print(f"\nError en el programa\n{errores[8]}\nBloque no cerrado en la linea: {lin_par[0]}")
     exit()
     
 ### Creacion del archivo para ensamblador ###    

@@ -1,4 +1,7 @@
-lista = ["n1","=","n2","+","n2","+","n2","+","n2","+","n2","+","n2","+","n3"]
+lista = [1, 2, 3, 4]
 
-for i in range(2, len(lista), 2):  
-    print(lista[i])
+print(lista[-1])
+
+lista.remove(lista[-1])
+
+print(lista[-1])
