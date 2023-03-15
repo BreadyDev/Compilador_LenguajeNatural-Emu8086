@@ -1,0 +1,36 @@
+Title Suma numeros 1
+
+decimal num1
+decimal num2
+decimal res
+entero ciclo
+texto tex
+
+escribir "Comparacion de valores"
+escribir "Ingresa el primer valor:"
+leer num1
+escribir "Ingresa el segundo valor:"
+leer num2
+escribir "Ingresa el tercer valor:"
+leer ciclo
+
+para ciclo
+escribir ciclo
+fin
+
+si num1 > 1
+escribir "Num1 es mayor que Num2"
+fin
+
+si num1 < num2
+escribir "Num1 es mayor que Num2"
+fin
+
+si num1 == num2
+escribir "Num1 es igual que Num2"
+fin
+
+tex = "Suma de los valores: "
+escribir tex
+res = num1 + num2
+escribir res
