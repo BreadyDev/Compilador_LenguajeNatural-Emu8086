@@ -1,0 +1,30 @@
+Title Revision
+
+entero a 
+entero b
+decimal c 
+decimal r 
+
+leer a
+leer b
+leer c 
+
+si a > b
+para j
+escribir js
+fin
+fin
+
+si a < c 
+para j
+r = c * 2
+escribir r
+fin
+fin
+
+si b == c
+para j
+r = c * j
+escribir r 
+fin
+fin

@@ -15,8 +15,6 @@ found = False
 
 nombre_archivo = "revision.txt"
 
-nom = ""
-
 # Expresiones regulares
 
 alpha = re.compile("[A-Za-zÑñ0-9=+-/()<>¿?,.\"]+")
@@ -179,16 +177,6 @@ with open(f"Compilador/archivos/{nombre_archivo}", "r") as texto:
     
 ### Iteracion del archivo - Analisis lexico/semantico ###
     
-if archivo[0].startswith("Title"):
-    if m_title.match(archivo[0]):
-        print("titulo")
-        nom = archivo[0].replace("Title ", "")
-        found = True
-    else:
-        error(0, archivo[0])
-else:
-    error(6, archivo[0])
-    
 for linea in archivo:
     palabra = linea.split(" ")
     
@@ -287,85 +275,3 @@ for linea in archivo:
 if lin_par != []:
     print(f"\nError en el programa\n{errores[8]}\nBloque no cerrado en la linea: {lin_par[0]}")
     exit()
-    
-### Creacion del programa - Añadir lineas al archivo ###
-    
-codigo = []
-lin_cod = ""
-tabs = 0
-    
-for linea in archivo:
-    palabra = linea.split(" ")
-    lin_cod = ""
-    
-    for t in range(tabs):
-        lin_cod += "\t"
-        
-    if linea == "":
-        codigo.append(lin_cod)
-    
-    if palabra[0] in ["entero", "decimal","texto"]:
-        if var_dec.match(linea):
-            lin_cod += palabra[1]
-            if palabra[0] == "entero":
-                lin_cod += ":int = 0"
-            if palabra[0] == "decimal":
-                lin_cod += ":float = 0"
-            if palabra[0] == "texto":
-                lin_cod += ":str =\"\""
-            
-            codigo.append(lin_cod)
-
-    if palabra[0] == "leer":
-        if m_leer.match(linea):
-            tipo = variables[buscar_posicion_variable(palabra[1], variables)]["tipe"] 
-            if tipo == "entero":
-                lin_cod += palabra[1] + " = int(input())"
-            elif tipo == "decimal":
-                lin_cod += palabra[1] + " = float(input())"
-            elif tipo == "texto":
-                lin_cod += palabra[1] + " = str(input())"
-                
-            codigo.append(lin_cod)
-
-    if palabra[0] == "escribir":
-        if m_escribir_texto.match(linea):
-            lin_cod += linea.replace("escribir ", "print (") + ")"
-            codigo.append(lin_cod)
-
-        elif m_escribir_var.match(linea):
-            lin_cod += "print(" + palabra[1]+")"
-            codigo.append(lin_cod)
-    
-    if palabra[0] == "si":
-        if m_si.match(linea):
-            tabs += 1
-            lin_cod += linea.replace("si", "if") + " :"
-            codigo.append(lin_cod)
-
-    if palabra[0] == "mientras":
-        if m_mientras.match(linea):
-            tabs += 1
-            lin_cod += linea.replace("mientras", "while ") + " :"
-            codigo.append(lin_cod)
-        
-    if palabra[0] == "para":
-        if m_para.match(linea):
-            tabs += 1
-            lin_cod += "for c" + palabra[1] + " in range(" + palabra[1] + "):"
-            codigo.append(lin_cod)
-            
-    if palabra[0] == "fin":
-        if linea == "fin":
-            tabs -= 1
-                
-    if not buscar_nombre_variable(palabra[0], variables):
-        print("valor var")
-        lin_cod += linea
-        codigo.append(lin_cod)
-
-### Creacion del archivo ###    
-
-with open(f"Compilador\\archivos\\{nom}.py", "w") as f:
-    for item in codigo:
-        f.write(f"{item}\n")
