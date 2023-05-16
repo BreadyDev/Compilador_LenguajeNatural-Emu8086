@@ -1,0 +1,8 @@
+entero var1
+escribir "Escribe un numero"
+leer var1
+escribir "Escribiste"
+escribir var1
+var1 = 0
+escribir "La variable ahora vale 0"
+escribir var1

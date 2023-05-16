@@ -1,42 +1,16 @@
-TITLE Estructura_Basica
+.model small
+.stack 100h
 
-DATOS SEGMENT
-;DECLARAR VARIABLES----------------------
-                                                                          
-                                         
-;----------------------------------------
+.data
 
-DATOS ENDS 
+    salto db 10, 13, "$"
 
+.code
+main proc
+    mov ax, @data
+    mov ds, ax
 
-PILA SEGMENT
-
-    DB 64 DUP(0)
-    
-PILA ENDS 
-
-
-CODIGO SEGMENT
-                              
-INICIO PROC FAR
-    
-ASSUME DS:DATOS, CS:CODIGO, SS:PILA 
-
-PUSH DS
-MOV AX, 0
-PUSH AX
-
-MOV AX, DATOS
-MOV DS, AX
-MOV ES, AX  
-
-;CODIGO DEL PROGRAMA---------------------- 
-
-
-;----------------------------------------- 
-
-RET
-INICIO ENDP
-CODIGO ENDS
-
-END INICIO
+    mov ah, 4Ch
+    int 21h
+main endp
+end main

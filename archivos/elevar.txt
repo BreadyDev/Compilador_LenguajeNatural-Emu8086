@@ -1,0 +1,11 @@
+entero num1
+escribir "ingresa un numero"
+leer num1
+
+entero num2
+escribir "ingresa otro numero"
+leer num2
+
+entero res
+res = num1 ^ num2
+escribir res

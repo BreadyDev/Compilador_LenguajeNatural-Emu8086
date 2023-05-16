@@ -1,0 +1,29 @@
+entero num
+entero cont
+entero res
+entero div
+cont = 1
+
+escribir "Ingresa un numero"
+leer num
+escribir "Tabla de multiplicar del"
+escribir num
+
+para cont hasta 10
+
+res = num * cont
+escribir "--------------"
+escribir cont
+escribir "veces es"
+escribir res
+div = res % 2
+
+si div == 0
+escribir "Es par"
+fin
+
+si div == 1
+escribir "Es impar"
+fin
+
+fin

@@ -1,0 +1,29 @@
+entero num1
+entero num2
+entero sum
+entero res
+entero mul
+entero div
+texto mensaje1
+
+escribir "Ingresa el primer numero"
+leer num1
+
+escribir "Ingresa el segundo numero"
+leer num2
+
+sum = num1 + num2
+escribir "La suma de los numeros es: "
+escribir sum
+
+res = num1 - num2
+escribir "La resta de los numeros es: "
+escribir res
+
+mul = num1 * num2
+escribir "La multiplicación de los numeros es: "
+escribir mul
+
+div = num1 / num2
+escribir "La divición de los numeros es: "
+escribir div

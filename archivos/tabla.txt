@@ -1,0 +1,48 @@
+entero var_num
+entero cont
+cont = 1
+entero res
+escribir "Ingresa un numero"
+leer var_num
+
+escribir "Tabla multiplicar"
+
+res = var_num * cont
+cont = cont + 1
+escribir res
+
+res = var_num * cont
+cont = cont + 1
+escribir res
+
+res = var_num * cont
+cont = cont + 1
+escribir res
+
+res = var_num * cont
+cont = cont + 1
+escribir res
+
+res = var_num * cont
+cont = cont + 1
+escribir res
+
+res = var_num * cont
+cont = cont + 1
+escribir res
+
+res = var_num * cont
+cont = cont + 1
+escribir res
+
+res = var_num * cont
+cont = cont + 1
+escribir res
+
+res = var_num * cont
+cont = cont + 1
+escribir res
+
+res = var_num * cont
+cont = cont + 1
+escribir res

@@ -1,0 +1,29 @@
+entero num1
+entero num2
+entero res
+
+escribir "Ingresa el primer numero"
+leer num1
+
+escribir "Ingresa el segundo numero"
+leer num2
+
+res = num1 + num2
+escribir "La suma es:"
+escribir res
+
+res = num1 - num2
+escribir "La resta es:"
+escribir res
+
+res = num1 * num2
+escribir "La multiplicacion es:"
+escribir res
+
+res = num1 / num2
+escribir "La division es:"
+escribir res
+
+res = num1 % num2
+escribir "El residio es:"
+escribir res

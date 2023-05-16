@@ -1,0 +1,13 @@
+entero num1
+num1 = 1
+entero num2
+num2 = 10
+
+escribir "desde"
+escribir num1
+escribir "hasta"
+escribir num2
+
+para num1 hasta 10
+escribir num1
+fin

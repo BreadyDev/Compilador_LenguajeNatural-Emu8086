@@ -1,0 +1,11 @@
+texto var1
+escribir "Escribe un texto: "
+leer var1
+escribir "escribiste: "
+escribir var1
+
+entero var2
+escribir "Escribe un numero: "
+leer var2
+escribir "escribiste: "
+escribir var2

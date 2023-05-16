@@ -1,0 +1,13 @@
+entero var_a
+entero var_b
+escribir "adasdas"
+escribir "aksjfdkajskfd"
+escribir " asdas das 2"
+leer var_a
+escribir "El valor de b"
+leer var_b
+escribir var_a
+var_a = 8 + 9
+var_b = 5
+escribir var_a
+escribir var_b

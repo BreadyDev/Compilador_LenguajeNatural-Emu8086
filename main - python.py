@@ -13,9 +13,9 @@ lin_par = []
 # Comprobar si se encontro el tipo de la linea
 found = False
 
-nombre_archivo = "revision.txt"
+nombre_archivo = "clase_villa.txt"
 
-nom = ""
+nom = nombre_archivo.replace(".txt","")
 
 # Expresiones regulares
 
@@ -178,16 +178,6 @@ with open(f"Compilador/archivos/{nombre_archivo}", "r") as texto:
     archivo = texto.read().split("\n")
     
 ### Iteracion del archivo - Analisis lexico/semantico ###
-    
-if archivo[0].startswith("Title"):
-    if m_title.match(archivo[0]):
-        print("titulo")
-        nom = archivo[0].replace("Title ", "")
-        found = True
-    else:
-        error(0, archivo[0])
-else:
-    error(6, archivo[0])
     
 for linea in archivo:
     palabra = linea.split(" ")
@@ -360,8 +350,15 @@ for linea in archivo:
             tabs -= 1
                 
     if not buscar_nombre_variable(palabra[0], variables):
-        print("valor var")
-        lin_cod += linea
+        
+        tipo = variables[buscar_posicion_variable(palabra[0], variables)]["tipe"] 
+        if tipo == "entero":
+            lin_cod += linea.replace(" = ", " = int( ") + " )"
+        elif tipo == "decimal":
+            lin_cod += linea.replace(" = ", " = float( ") + " )"
+        elif tipo == "texto":
+            lin_cod += linea.replace(" = ", " = str( ") + " )"
+        
         codigo.append(lin_cod)
 
 ### Creacion del archivo ###    

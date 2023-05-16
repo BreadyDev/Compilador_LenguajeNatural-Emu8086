@@ -1,0 +1,9 @@
+entero num1
+entero num2
+
+num1 = 5
+num2 = 2
+
+si num1 > num2
+escribir "Si jala"
+fin
